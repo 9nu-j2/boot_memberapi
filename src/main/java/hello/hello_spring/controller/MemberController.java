@@ -1,6 +1,7 @@
 package hello.hello_spring.controller;
 
 import hello.hello_spring.dto.MemberDTO;
+import hello.hello_spring.dto.MemberForm;
 import hello.hello_spring.entity.Member;
 import hello.hello_spring.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,8 +41,8 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    public ResponseEntity<MemberDTO> createMember(@RequestBody String email, String password){
-        MemberDTO createdMember = memberService.createMember(email, password);
+    public ResponseEntity<MemberDTO> createMember(@RequestBody MemberForm memberForm){
+        MemberDTO createdMember = memberService.createMember(memberForm.getEmail(), memberForm.getPassword());
         return ResponseEntity.status(201).header("Location", "/members/" + createdMember.getId()).body(createdMember);
     }
 
