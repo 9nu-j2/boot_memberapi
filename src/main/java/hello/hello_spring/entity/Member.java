@@ -13,9 +13,11 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String password;
+    private String ownername;
 
-    private String email;
+    private String location;
+
+    private String password;
 
     public  Long getId() {
         return id;
@@ -25,12 +27,20 @@ public class Member {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getOwnername() {
+        return ownername;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setOwnername(String ownername) {
+        this.ownername = ownername;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getPassword() {

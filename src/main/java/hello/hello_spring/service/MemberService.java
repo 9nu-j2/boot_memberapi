@@ -18,11 +18,27 @@ public class MemberService {
     private MemberRepository memberRepository;
 
     /**
+     * 로그인
+     */
+
+    public boolean login(String ownername, String passwword) {
+        Optional<Member> memberOptional = memberRepository.findByOwnername(ownername);
+        Optional<Member> memberOptional2 = memberRepository.findByPassword(passwword);
+
+        if(memberOptional.isPresent() && memberOptional2.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
      * 회원가입
      */
 
-    private void validateDuplicateMember(String email) {
-        Optional<Member> memberOptional = memberRepository.findByEmail(email);
+    private void validateDuplicateMember(String ownername) {
+        Optional<Member> memberOptional = memberRepository.findByOwnername(ownername);
 
         if(memberOptional.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
@@ -30,16 +46,17 @@ public class MemberService {
 
     }
 
-    public MemberDTO createMember(String email, String password) {
-        validateDuplicateMember(email);
+    public MemberDTO createMember(String ownername, String password, String location) {
+        validateDuplicateMember(ownername);
 
         Long id = Long.valueOf(memberRepository.count() + 1);
         Member user = new Member();
         user.setId(id);
-        user.setEmail(email);
+        user.setOwnername(ownername);
         user.setPassword(password);
+        user.setLocation(location);
         memberRepository.save(user);
-        return new MemberDTO(id, email);
+        return new MemberDTO(id, ownername, location);
     }
 
     /**
@@ -47,7 +64,7 @@ public class MemberService {
      */
     public Optional<MemberDTO> getMemberById(Long id) {
         return memberRepository.findById(id)
-                .map(user -> new MemberDTO(user.getId(), user.getEmail()));
+                .map(member -> new MemberDTO(member.getId(), member.getOwnername(), member.getLocation()));
     }
 
 
@@ -56,7 +73,7 @@ public class MemberService {
      */
     public List<MemberDTO> findMembers() {
         return memberRepository.findAll().stream()
-                .map(member -> new MemberDTO(member.getId(), member.getEmail()))
+                .map(member -> new MemberDTO(member.getId(), member.getOwnername(), member.getLocation()))
                 .collect(Collectors.toList());
     }
 
