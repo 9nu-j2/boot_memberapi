@@ -21,11 +21,10 @@ public class MemberService {
      * 로그인
      */
 
-    public boolean login(String ownername, String passwword) {
-        Optional<Member> memberOptional = memberRepository.findByOwnername(ownername);
-        Optional<Member> memberOptional2 = memberRepository.findByPassword(passwword);
+    public boolean login(String ownername, String password) {
+        Optional<Member> memberOptional = memberRepository.findByOwnernameAndPassword(ownername, password);
 
-        if(memberOptional.isPresent() && memberOptional2.isPresent()) {
+        if(memberOptional.isPresent()) {
             return true;
         } else {
             return false;

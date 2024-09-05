@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin()
 @RestController
 @RequestMapping("/members")
 public class MemberController {
@@ -58,13 +59,9 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/login")
-    public ResponseEntity loginMember(@RequestBody MemberLoginDTO MemberLoginDTO){
+    public boolean loginMember(@RequestBody MemberLoginDTO MemberLoginDTO){
         boolean login = memberService.login(MemberLoginDTO.getOwnername(), MemberLoginDTO.getPassword());
-        if (login) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(404).build();
-        }
+        return login;
     }
 
     @Operation(summary = "Get all members", description = "Fetch all members")
