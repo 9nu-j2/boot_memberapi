@@ -1,6 +1,7 @@
 package hello.hello_spring.service;
 
 import hello.hello_spring.dto.MemberDTO;
+import hello.hello_spring.dto.MemberLoginDTO;
 import hello.hello_spring.entity.Member;
 import hello.hello_spring.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,18 @@ public class MemberService {
      * 로그인
      */
 
-    public boolean login(String ownername, String password) {
-        Optional<Member> memberOptional = memberRepository.findByOwnernameAndPassword(ownername, password);
+    public Member login(String ownername, String password) {
+//        Optional<Member> memberOptional = memberRepository.findByOwnernameAndPassword(ownername, password);
 
-        if(memberOptional.isPresent()) {
-            return true;
-        } else {
-            return false;
-        }
+        Member member = memberRepository.findByOwnernameAndPassword(ownername, password)
+                .orElseThrow(IllegalArgumentException::new);
+
+        return member;
+//        if(memberOptional.isPresent()) {
+//            throw new IllegalArgumentException();
+//        } else {
+//            return memberOptional.get();
+//        }
 
     }
 
@@ -65,7 +70,6 @@ public class MemberService {
         return memberRepository.findById(id)
                 .map(member -> new MemberDTO(member.getId(), member.getOwnername(), member.getLocation()));
     }
-
 
     /**
      * 전체 회원 조회

@@ -59,9 +59,13 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/login")
-    public boolean loginMember(@RequestBody MemberLoginDTO MemberLoginDTO){
-        boolean login = memberService.login(MemberLoginDTO.getOwnername(), MemberLoginDTO.getPassword());
-        return login;
+    public MemberDTO loginMember(@RequestBody MemberLoginDTO MemberLoginDTO){
+        Member login = memberService.login(MemberLoginDTO.getOwnername(), MemberLoginDTO.getPassword());
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setId(login.getId());
+        memberDTO.setOwnername(login.getOwnername());
+        memberDTO.setLocation((login.getLocation()));
+        return memberDTO;
     }
 
     @Operation(summary = "Get all members", description = "Fetch all members")
